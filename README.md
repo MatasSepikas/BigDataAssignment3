@@ -82,7 +82,7 @@ Histogram of Δt (time differences in milliseconds)
 
 Histogram shows numerous data points with Δt values from 0 to 50,000. A long tail extends to higher Δt values, indicating occasional larger gaps between data points.
 
-![Histogram 2](histograms\histogram2.png)
+![Histogram 2](https://github.com/MatasSepikas/BigDataAssignment3/blob/main/histograms/histogram2.png)
 Histogram of Δt (time differences in milliseconds)
 
 This histogram emphasizes Δt values up to 50,000 milliseconds, showing a prominent peak at around 10,000 milliseconds. The distribution indicates that data points are mostly collected approximately every 15 seconds, with some variation.
