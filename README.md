@@ -77,7 +77,7 @@ Time differences (Δt) in milliseconds between subsequent data points for each f
 
 ### Histograms for Data Analysis
 
-![Histogram 1](histograms\histogram1.png)
+![Histogram 1](https://github.com/MatasSepikas/BigDataAssignment3/blob/main/histograms/histogram1.png)
 Histogram of Δt (time differences in milliseconds)
 
 Histogram shows numerous data points with Δt values from 0 to 50,000. A long tail extends to higher Δt values, indicating occasional larger gaps between data points.
