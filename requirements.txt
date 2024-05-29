@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pandas
+matplotlib
+numpy
+motor
+pymongo
+fastapi-cors

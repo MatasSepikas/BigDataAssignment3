@@ -1,0 +1,149 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        requirements_file: requirements.txt
+    stdin_open: true
+    tty: true
+    ports:
+      - '8800:8800'
+    volumes:
+      - .:/app
+      - ./data:/data
+    depends_on:
+      - mongos1
+    restart: always
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: defaultpassword
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app-network
+
+  mongors1n1:
+    container_name: mongors1n1
+    image: mongo
+    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
+    ports:
+      - 27018:27017
+    expose:
+      - "27017"
+    environment:
+      TERM: xterm
+    volumes:
+      - mongo_rs1_data1:/data/db
+    networks:
+      - mongo-network
+
+  mongors1n2:
+    container_name: mongors1n2
+    image: mongo
+    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
+    ports:
+      - 27027:27017
+    expose:
+      - "27017"
+    environment:
+      TERM: xterm
+    volumes:
+      - mongo_rs1_data2:/data/db
+    networks:
+      - mongo-network
+
+  mongors1n3:
+    container_name: mongors1n3
+    image: mongo
+    command: mongod --shardsvr --replSet mongors1 --dbpath /data/db --port 27017
+    ports:
+      - 27037:27017
+    expose:
+      - "27017"
+    environment:
+      TERM: xterm
+    volumes:
+      - mongo_rs1_data3:/data/db
+    networks:
+      - mongo-network
+
+  mongocfg1:
+    container_name: mongocfg1
+    image: mongo
+    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
+    environment:
+      TERM: xterm
+    expose:
+      - "27017"
+    volumes:
+      - mongo_cfg_data1:/data/db
+    networks:
+      - mongo-network
+
+  mongocfg2:
+    container_name: mongocfg2
+    image: mongo
+    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
+    environment:
+      TERM: xterm
+    expose:
+      - "27017"
+    volumes:
+      - mongo_cfg_data2:/data/db
+    networks:
+      - mongo-network
+
+  mongocfg3:
+    container_name: mongocfg3
+    image: mongo
+    command: mongod --configsvr --replSet mongors1conf --dbpath /data/db --port 27017
+    environment:
+      TERM: xterm
+    expose:
+      - "27017"
+    volumes:
+      - mongo_cfg_data3:/data/db
+    networks:
+      - mongo-network
+
+  mongos1:
+    container_name: mongos1
+    image: mongo
+    depends_on:
+      - mongocfg1
+      - mongocfg2
+      - mongocfg3
+    command: mongos --configdb mongors1conf/mongocfg1:27017,mongocfg2:27017,mongocfg3:27017 --port 27017
+    ports:
+      - 27019:27017
+    expose:
+      - "27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - mongo-network
+      - app-network
+
+volumes:
+  mongo_rs1_data1:
+  mongo_rs1_data2:
+  mongo_rs1_data3:
+  mongo_cfg_data1:
+  mongo_cfg_data2:
+  mongo_cfg_data3:
+  mongo_data:
+
+networks:
+  mongo-network:
+    driver: bridge
+  app-network:
+    driver: bridge
