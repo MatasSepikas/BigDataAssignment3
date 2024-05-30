@@ -92,11 +92,13 @@ This histogram emphasizes Δt values up to 50,000 milliseconds, showing a promin
 
 To demonstrate the resilience of the MongoDB sharded cluster, follow these steps:
 
-Check the Status of the Entire Replica Set Using mongos Before Stopping a Member:
+Check the sStatus of the entire replica set using mongos before stopping a member:
 - `docker exec -it mongors1n1 mongosh --eval "rs.status()"`
-Stop the mongors1n3 Member of the Replica Set:
+  
+Stop the mongors1n3 member of the replica set:
 - `docker stop mongors1n1`
-Check the Status of the Entire Replica Set Using mongos After Stopping a Member:
+  
+Check the status of the entire replica set using mongos after stopping a member:
 - `docker exec -it mongors1n2 mongosh --eval "rs.status()"`
 
 When the primary member `mongors1n1` stops, the replica set will automatically reconfigure itself to maintain availability. The status checks will indicate that `mongors1n1` is unreachable, but the other members (`mongors1n2`, which became primary, and `mongors1n3`) will continue to function, ensuring that the database remains operational. [This example is demonstrated in a recording.](https://vult-my.sharepoint.com/:v:/r/personal/matas_sepikas_mif_stud_vu_lt/Documents/Mongo_database_instance_failures.mp4?csf=1&web=1&e=52gcOx&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
